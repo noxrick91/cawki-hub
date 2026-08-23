@@ -27,14 +27,15 @@ Cawki 是跑在你终端里的编程助手：读代码、改文件、跑测试�
 
 This page lists changes in the **current public release**.
 
-**What's new in v0.1.20** — 2026-08-19
+**What's new in v0.1.21** — 2026-08-23
 
-- Added visible MCP pack installation phases, duplicate-operation protection, and a persistent custom-source action in the MCP catalog.
-- Made MCP dependency installation explicit and on demand instead of silently installing every package's Python requirements.
-- Staged and validated MCP pack updates before activation, preserving the previous version when installation or registration fails.
-- Restricted automatic bridge setup to official Hub packs and documented which external dependencies and application add-ons remain after uninstall.
-- Prevented MCP installs from appearing permanently stuck during hidden dependency setup and bounded official bridge setup with a hard timeout.
-- Surfaced post-install warnings in the MCP menu and cleaned temporary download, extraction, and staging directories after failures.
+- Deferred MCP tool schemas behind compact server summaries and `tool_search`, loading only the tools relevant to the current session.
+- Made context-limit failures provider-independent and report the request and endpoint token limits when available.
+- Persisted Linux release-runner APT, Cargo, cargo-xwin, Windows SDK, and cross-target caches with explicit cache identity and validation.
+- Made session and configuration replacement atomic and ordered across Linux and Windows, and waited for the final save before reporting a resumable exit.
+- Made Escape interrupt routing, turn preparation, model requests, and completion races immediately, including when a draft is present or a permission request finishes concurrently.
+- Excluded `.cawki` and `.caw-agent` runtime trees from checkpoint Git baselines, preventing recursive checkpoint growth and long uninterruptible scans.
+- Avoided retrying deterministic streaming rejections with the same non-stream request.
 
 Full history: [CHANGELOG.md](./CHANGELOG.md).
 
@@ -511,6 +512,8 @@ Computer-use 有机器级锁、应用白名单与密码管理器/银行等硬拒
 
 全局已安装包和启用的插件由用户管理，可正常加载。仓库内 `.mcp.json` 默认视为不可信并忽略；只对你信任的仓库开启 `/settings mcp-workspace`，关闭后会立即卸载这些工作区服务器。
 
+MCP 工具目录默认延迟加载：首轮只把服务器摘要和 `tool_search` 发给模型，不发送所有工具 schema。模型按任务搜索后，每次最多加载 5 个相关工具，并在当前会话后续请求中复用；`/mcp` 菜单仍可浏览完整目录。这个过程使用标准 function calling，不依赖具体模型提供商。
+
 官方包装在公开仓 `mcp/`（[目录](https://github.com/noxrick91/cawki-hub/tree/master/mcp)）：browser、doc、image、ocr、speech、freecad、blender。`/mcp install <name>` 从 GitHub 下载到 `~/.cawki/mcp/<name>/`。也可以装任意 GitHub 包：`/mcp install owner/repo` 或仓库 URL。工作区里的 `./mcp/<name>`、文件夹、zip 仍然可用。安装采用 staging 后切换，失败时保留旧版本；不会隐式安装 `requirements.txt` 中的重型 Python 依赖，连接后按需调用包提供的 `*_install_deps`。`/mcp install browser` 之后用 `mcp__browser__*`。
 
 附加音频只是路径，**不会**自动转写。用户明确要求转写时再用 speech 包。
@@ -612,6 +615,7 @@ extensions = ["acme"]
 | 找不到命令 | `source ~/.cawki/env` 或新开终端；安装器会写 rc hook。Windows 新开一个终端以加载用户 PATH |
 | `serve` 拒绝监听 | 非 `127.0.0.1` / `::1` 必须 `--token` 或 `CAW_SERVE_TOKEN` |
 | Ollama 仍要密钥 | 用 `/model add ollama`，不要走需要 key 的 OpenAI 兼容网关 |
+| 模型报 context 太小 / 一直 thinking | 按错误里的 request / endpoint token 数提高该模型或接口的 context，或减少系统提示、工具和历史；本地服务修改后需重启并确认实际分配值 |
 | 中转站 401 / 模型不存在 | 用中转站自己的 Base URL、密钥和模型名；不要改 `openai` / `anthropic` 预设地址。见 [模型与密钥](#/models) |
 
 本手册是对外使用说明的唯一维护处。实现细节只在私有源码仓里。

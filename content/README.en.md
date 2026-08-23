@@ -27,14 +27,15 @@ Start with [Install](#/install) and [Quick start](#/quick-start). Slash commands
 
 This page lists changes in the **current public release**.
 
-**What's new in v0.1.20** — 2026-08-19
+**What's new in v0.1.21** — 2026-08-23
 
-- Added visible MCP pack installation phases, duplicate-operation protection, and a persistent custom-source action in the MCP catalog.
-- Made MCP dependency installation explicit and on demand instead of silently installing every package's Python requirements.
-- Staged and validated MCP pack updates before activation, preserving the previous version when installation or registration fails.
-- Restricted automatic bridge setup to official Hub packs and documented which external dependencies and application add-ons remain after uninstall.
-- Prevented MCP installs from appearing permanently stuck during hidden dependency setup and bounded official bridge setup with a hard timeout.
-- Surfaced post-install warnings in the MCP menu and cleaned temporary download, extraction, and staging directories after failures.
+- Deferred MCP tool schemas behind compact server summaries and `tool_search`, loading only the tools relevant to the current session.
+- Made context-limit failures provider-independent and report the request and endpoint token limits when available.
+- Persisted Linux release-runner APT, Cargo, cargo-xwin, Windows SDK, and cross-target caches with explicit cache identity and validation.
+- Made session and configuration replacement atomic and ordered across Linux and Windows, and waited for the final save before reporting a resumable exit.
+- Made Escape interrupt routing, turn preparation, model requests, and completion races immediately, including when a draft is present or a permission request finishes concurrently.
+- Excluded `.cawki` and `.caw-agent` runtime trees from checkpoint Git baselines, preventing recursive checkpoint growth and long uninterruptible scans.
+- Avoided retrying deterministic streaming rejections with the same non-stream request.
 
 Full history: [CHANGELOG.md](./CHANGELOG.md).
 
@@ -511,6 +512,8 @@ Computer-use has a machine-level lock, an app allowlist, and hard denies for pas
 
 Global installed packs and enabled plugins are user-managed and load normally. A repository's `.mcp.json` is ignored as untrusted by default; enable `/settings mcp-workspace` only for a repository you trust. Turning it off unloads those workspace servers immediately.
 
+MCP tool catalogs are deferred by default: the first request sends only compact server summaries and `tool_search`, not every tool schema. The model searches for the task, loads at most five relevant tools at a time, and reuses them for later requests in that session; the `/mcp` menu still browses the complete catalog. This uses standard function calling and is provider-independent.
+
 Official packs live in the public repo under `mcp/` ([catalog](https://github.com/noxrick91/cawki-hub/tree/master/mcp)): browser, doc, image, ocr, speech, freecad, blender. `/mcp install <name>` downloads from GitHub into `~/.cawki/mcp/<name>/`. Any GitHub pack works: `/mcp install owner/repo` or a repo URL. Workspace `./mcp/<name>`, a folder, or a zip still work. Installs switch from a validated staging directory and preserve the old version on failure. Heavy Python dependencies from `requirements.txt` are not installed implicitly; call the pack's `*_install_deps` tool on demand after it connects. After `/mcp install browser`, use `mcp__browser__*`.
 
 Attached audio is only a path — it is **not** transcribed automatically. Use the speech pack when the user asks.
@@ -612,6 +615,7 @@ extensions = ["acme"]
 | Command not found | `source ~/.cawki/env` or open a new terminal; the installer writes an rc hook. On Windows, open a new terminal so the user PATH reloads |
 | `serve` refuses to listen | Anything other than `127.0.0.1` / `::1` needs `--token` or `CAW_SERVE_TOKEN` |
 | Ollama still asks for a key | Use `/model add ollama`, not an OpenAI-compatible gateway that requires a key |
+| Model reports a small context / stays thinking | Raise that model or endpoint's context above the request size reported by the error, or reduce system prompt, tools, and history; restart local services after changing the allocation and verify the effective value |
 | Gateway 401 / unknown model | Use the relay’s own base URL, key, and model id; do not rewrite `openai` / `anthropic` presets. See [Models and keys](#/models) |
 
 This manual is the only public usage doc. Implementation notes stay in the private source repo.

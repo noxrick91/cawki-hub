@@ -6,6 +6,21 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 
 ## [Unreleased]
 
+## [0.1.21] - 2026-08-23
+
+### Changed
+
+- Deferred MCP tool schemas behind compact server summaries and `tool_search`, loading only the tools relevant to the current session.
+- Made context-limit failures provider-independent and report the request and endpoint token limits when available.
+- Persisted Linux release-runner APT, Cargo, cargo-xwin, Windows SDK, and cross-target caches with explicit cache identity and validation.
+
+### Fixed
+
+- Made session and configuration replacement atomic and ordered across Linux and Windows, and waited for the final save before reporting a resumable exit.
+- Made Escape interrupt routing, turn preparation, model requests, and completion races immediately, including when a draft is present or a permission request finishes concurrently.
+- Excluded `.cawki` and `.caw-agent` runtime trees from checkpoint Git baselines, preventing recursive checkpoint growth and long uninterruptible scans.
+- Avoided retrying deterministic streaming rejections with the same non-stream request.
+
 ## [0.1.20] - 2026-08-19
 
 ### Changed

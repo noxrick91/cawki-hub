@@ -1,16 +1,17 @@
 {
-  "tag": "v0.1.20",
-  "version": "0.1.20",
-  "date": "2026-08-19",
-  "title": "What's new in v0.1.20",
+  "tag": "v0.1.21",
+  "version": "0.1.21",
+  "date": "2026-08-23",
+  "title": "What's new in v0.1.21",
   "notes": [
-    "Added visible MCP pack installation phases, duplicate-operation protection, and a persistent custom-source action in the MCP catalog.",
-    "Made MCP dependency installation explicit and on demand instead of silently installing every package's Python requirements.",
-    "Staged and validated MCP pack updates before activation, preserving the previous version when installation or registration fails.",
-    "Restricted automatic bridge setup to official Hub packs and documented which external dependencies and application add-ons remain after uninstall.",
-    "Prevented MCP installs from appearing permanently stuck during hidden dependency setup and bounded official bridge setup with a hard timeout.",
-    "Surfaced post-install warnings in the MCP menu and cleaned temporary download, extraction, and staging directories after failures."
+    "Deferred MCP tool schemas behind compact server summaries and `tool_search`, loading only the tools relevant to the current session.",
+    "Made context-limit failures provider-independent and report the request and endpoint token limits when available.",
+    "Persisted Linux release-runner APT, Cargo, cargo-xwin, Windows SDK, and cross-target caches with explicit cache identity and validation.",
+    "Made session and configuration replacement atomic and ordered across Linux and Windows, and waited for the final save before reporting a resumable exit.",
+    "Made Escape interrupt routing, turn preparation, model requests, and completion races immediately, including when a draft is present or a permission request finishes concurrently.",
+    "Excluded `.cawki` and `.caw-agent` runtime trees from checkpoint Git baselines, preventing recursive checkpoint growth and long uninterruptible scans.",
+    "Avoided retrying deterministic streaming rejections with the same non-stream request."
   ],
-  "body": "### Changed\n\n- Added visible MCP pack installation phases, duplicate-operation protection, and a persistent custom-source action in the MCP catalog.\n- Made MCP dependency installation explicit and on demand instead of silently installing every package's Python requirements.\n- Staged and validated MCP pack updates before activation, preserving the previous version when installation or registration fails.\n- Restricted automatic bridge setup to official Hub packs and documented which external dependencies and application add-ons remain after uninstall.\n\n### Fixed\n\n- Prevented MCP installs from appearing permanently stuck during hidden dependency setup and bounded official bridge setup with a hard timeout.\n- Surfaced post-install warnings in the MCP menu and cleaned temporary download, extraction, and staging directories after failures.",
+  "body": "### Changed\n\n- Deferred MCP tool schemas behind compact server summaries and `tool_search`, loading only the tools relevant to the current session.\n- Made context-limit failures provider-independent and report the request and endpoint token limits when available.\n- Persisted Linux release-runner APT, Cargo, cargo-xwin, Windows SDK, and cross-target caches with explicit cache identity and validation.\n\n### Fixed\n\n- Made session and configuration replacement atomic and ordered across Linux and Windows, and waited for the final save before reporting a resumable exit.\n- Made Escape interrupt routing, turn preparation, model requests, and completion races immediately, including when a draft is present or a permission request finishes concurrently.\n- Excluded `.cawki` and `.caw-agent` runtime trees from checkpoint Git baselines, preventing recursive checkpoint growth and long uninterruptible scans.\n- Avoided retrying deterministic streaming rejections with the same non-stream request.",
   "url": "./CHANGELOG.md"
 }

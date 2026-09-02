@@ -1,26 +1,26 @@
 {
-  "tag_name": "v0.1.21",
-  "published_at": "2026-08-23T08:04:52Z",
+  "tag_name": "v0.2.0",
+  "published_at": "2026-09-02T16:53:33Z",
   "assets": [
     {
       "name": "SHA256SUMS",
-      "browser_download_url": "https://github.com/noxrick91/cawki-hub/releases/download/v0.1.21/SHA256SUMS"
+      "browser_download_url": "https://github.com/noxrick91/cawki-hub/releases/download/v0.2.0/SHA256SUMS"
     },
     {
       "name": "cawki-aarch64-pc-windows-msvc.exe",
-      "browser_download_url": "https://github.com/noxrick91/cawki-hub/releases/download/v0.1.21/cawki-aarch64-pc-windows-msvc.exe"
+      "browser_download_url": "https://github.com/noxrick91/cawki-hub/releases/download/v0.2.0/cawki-aarch64-pc-windows-msvc.exe"
     },
     {
       "name": "cawki-aarch64-unknown-linux-gnu",
-      "browser_download_url": "https://github.com/noxrick91/cawki-hub/releases/download/v0.1.21/cawki-aarch64-unknown-linux-gnu"
+      "browser_download_url": "https://github.com/noxrick91/cawki-hub/releases/download/v0.2.0/cawki-aarch64-unknown-linux-gnu"
     },
     {
       "name": "cawki-x86_64-pc-windows-gnu.exe",
-      "browser_download_url": "https://github.com/noxrick91/cawki-hub/releases/download/v0.1.21/cawki-x86_64-pc-windows-gnu.exe"
+      "browser_download_url": "https://github.com/noxrick91/cawki-hub/releases/download/v0.2.0/cawki-x86_64-pc-windows-gnu.exe"
     },
     {
       "name": "cawki-x86_64-unknown-linux-gnu",
-      "browser_download_url": "https://github.com/noxrick91/cawki-hub/releases/download/v0.1.21/cawki-x86_64-unknown-linux-gnu"
+      "browser_download_url": "https://github.com/noxrick91/cawki-hub/releases/download/v0.2.0/cawki-x86_64-unknown-linux-gnu"
     }
   ]
 }

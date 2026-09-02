@@ -27,15 +27,35 @@ Cawki 是跑在你终端里的编程助手：读代码、改文件、跑测试�
 
 This page lists changes in the **current public release**.
 
-**What's new in v0.1.21** — 2026-08-23
+**What's new in v0.2.0** — 2026-09-03
 
-- Deferred MCP tool schemas behind compact server summaries and `tool_search`, loading only the tools relevant to the current session.
-- Made context-limit failures provider-independent and report the request and endpoint token limits when available.
-- Persisted Linux release-runner APT, Cargo, cargo-xwin, Windows SDK, and cross-target caches with explicit cache identity and validation.
-- Made session and configuration replacement atomic and ordered across Linux and Windows, and waited for the final save before reporting a resumable exit.
-- Made Escape interrupt routing, turn preparation, model requests, and completion races immediately, including when a draft is present or a permission request finishes concurrently.
-- Excluded `.cawki` and `.caw-agent` runtime trees from checkpoint Git baselines, preventing recursive checkpoint growth and long uninterruptible scans.
-- Avoided retrying deterministic streaming rejections with the same non-stream request.
+- `cawki serve` now requires a token on loopback as well. Existing automation that called the API with no `Authorization` header receives 401. Pass `--token` / `CAW_SERVE_TOKEN`, read the token printed at startup, or opt out with `--anonymous`.
+- Remembered MCP approvals are now keyed on the individual tool rather than the whole server, so grants saved by earlier versions no longer match and each MCP tool asks once more.
+- `--allowedTools` no longer overrides plan mode. Writes, shell, MCP, and network stay denied in plan regardless of the flag.
+- The Blender and FreeCAD GUI bridges require the token their addon writes at startup. Reinstall the addon (`python mcp/<app>/install_bridge.py`) and restart the application; `*_BRIDGE_HOST` is no longer read.
+- Required a per-machine token on the Blender and FreeCAD GUI bridges, which run arbitrary Python inside those applications. The addon writes the token to `~/.cawki/<app>-bridge.json` (owner-only) on startup, the port is loopback-only and no longer configurable, and a connection whose first line is not JSON is dropped so a web page cannot reach the bridge with a cross-origin request.
+- Required an `Authorization: Bearer` token for `cawki serve` on loopback as well; without `--token` a random one is generated and printed at startup, and `--anonymous` is now the explicit way to serve without auth.
+- Stopped `cawki serve` from silently widening the permission mode: an HTTP caller now gets the mode the user configured instead of being upgraded to `auto`.
+- Rejected session ids that are not a single path segment. A crafted id could previously read, and through `serve` also write, JSON files outside the sessions directory.
+- Narrowed MCP approvals from the whole server to the individual tool named on the approval sheet. A server-wide grant is still available as an explicit `mcp:<server>__*` pattern.
+- Stopped auto mode from approving arbitrary scripts whose filename merely contains `pytest` or `unittest`, and required every `mvn` / `gradle` goal to be a verify goal.
+- Stopped `--allowedTools` from overriding plan mode. Plan can be entered at any moment with Shift+Tab and the model is told it cannot touch the codebase, so a launch flag no longer quietly re-enables writes, shell, MCP, or network there; the flag still applies in every other mode, and `--denyTools` still wins everywhere.
+- Made `debug start` always ask for approval. Its grant path is the program to debug, which parses like a command, so debugging `cargo test` or `python -m pytest` was auto-approved in auto and debug modes as though it were the check command — contrary to what debug mode documents.
+- Denied tool access to well-known credential files (`~/.ssh`, `~/.aws`, `~/.gnupg`, `~/.kube`, `.netrc`, `.git-credentials`, `.npmrc`, `~/.docker/config.json`, `gh` hosts) and refused the home directory itself as a working directory.
+- Wrote API-key files atomically and owner-only from creation, instead of a plain write followed by a permission change.
+- Kept the sandbox proxy's Unix sockets in an owner-only directory, masked workspace secret files inside the jail even when absent, and stopped forwarding a GitHub token across redirects during MCP pack installation.
+- Told the model that file contents, command output, fetched web pages, and MCP results are data and never instructions.
+- MCP servers now receive `CAW_EXTRA_DIRS`, so tools accept paths under directories granted with `--add-dir` instead of rejecting work the agent is allowed to do.
+- Only MCP tools a server marks `readOnlyHint` run in parallel; anything that may mutate runs serially.
+- `tools/list` results are cached and re-fetched only for a server that reported a change, and `cawki serve` connects its MCP pool once instead of per request.
+- MCP servers now come online one at a time instead of all at the end, so a slow or unreachable server no longer holds back every other server's tools. Startup shows connection progress.
+- Loaded configuration files that are missing whole sections instead of failing to start.
+- Counted CJK text at roughly one token per character, so auto-compact fires on time in Chinese and Japanese conversations.
+- Capped NDJSON frames from MCP servers, which could previously grow without bound.
+- Applied the handshake and discovery timeouts to HTTP and SSE MCP servers. They were dropped on that transport, so a host that accepted the connection and never replied blocked startup for two minutes rather than eight seconds.
+- Serialized background permission writes so two quick approvals cannot drop one another.
+- Reported "reloading" rather than "not enabled" for MCP calls made while servers reconnect.
+- Stopped a vision downgrade or a `stream_options` retry from consuming one of the network retry attempts, and shared one HTTP connection pool across model rebinds.
 
 Full history: [CHANGELOG.md](./CHANGELOG.md).
 

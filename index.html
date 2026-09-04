@@ -3,19 +3,19 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title data-i18n-title="home">Cawki — 终端里的编程助手</title>
-  <meta name="description" data-i18n-desc="home" content="在终端里读代码、改文件、跑测试。默认在写入文件或执行命令前请求确认，支持多模型、MCP、会话与自动化。">
-  <meta name="theme-color" content="#121418">
+  <title data-i18n-title="home">Cawki — 真正动手的终端编程搭档</title>
+  <meta name="description" data-i18n-desc="home" content="让 Cawki 在你的项目里理解代码、完成修改并运行测试。操作范围和权限由你掌控，支持多模型、MCP 与自动化。">
+  <meta name="theme-color" content="#0d0f12">
   <link rel="canonical" href="https://agent.noxcaw.com/">
   <meta property="og:type" content="website">
-  <meta property="og:title" content="Cawki — 终端里的编程助手">
-  <meta property="og:description" content="读代码、改文件、跑测试，默认在写入与执行前请求确认。">
+  <meta property="og:title" content="Cawki — 真正动手的终端编程搭档">
+  <meta property="og:description" content="理解代码、完成修改、运行测试；操作范围和权限由你掌控。">
   <meta property="og:url" content="https://agent.noxcaw.com/">
   <link rel="icon" href="./assets/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="./assets/style.css?v=v0.2.1-1788504116">
+  <link rel="stylesheet" href="./assets/style.css?v=v0.2.1-1788514286">
 </head>
 <body>
   <div class="wrap">
@@ -39,10 +39,10 @@
   <main class="wrap">
     <section class="hero-split">
       <div class="hero">
-        <p class="kicker" data-i18n="hero.kicker">你的终端里</p>
-        <h1 data-i18n-html="hero.title">多了一个<br>会改代码的搭档</h1>
+        <p class="kicker" data-i18n="hero.kicker">从理解代码到通过测试</p>
+        <h1 data-i18n-html="hero.title">一个真正会动手的<br>终端编程搭档</h1>
         <p class="lede" data-i18n="hero.lede">
-          在终端里读代码、改文件、跑测试。文件操作默认限制在工作区，写入或执行命令前默认请求你的确认。
+          它能理解你的项目、直接修改文件并运行测试。默认只在工作区内操作；写入文件和执行命令前，会先征得你的确认。
         </p>
         <div class="row">
           <a class="btn" href="#howto" data-i18n="hero.install">立即安装</a>
@@ -51,6 +51,10 @@
         <p class="meta hero-meta"><span id="dl-meta" aria-live="polite" data-i18n="hero.waiting">正在加载最新版</span><span aria-hidden="true"> · </span><a href="#download" data-i18n="hero.manual">手动下载</a></p>
       </div>
       <div class="tui" id="stage" aria-hidden="true">
+        <div class="tui-chrome">
+          <span></span><span></span><span></span>
+          <span class="tui-chrome-title">cawki · terminal</span>
+        </div>
         <div class="tui-head">
           <span class="tui-brand">Cawki</span>
           <span class="tui-dim" id="stage-version">latest</span>
@@ -65,15 +69,15 @@
             <div class="tui-sheet-title" id="stage-sheet-title"></div>
             <div class="tui-sheet-detail" id="stage-sheet-detail"></div>
             <div class="tui-sheet-choices" id="stage-sheet-choices"></div>
-            <div class="tui-sheet-hint">↑↓ · 1–5 · esc deny · type to queue</div>
+            <div class="tui-sheet-hint" data-i18n="stage.sheetHint">↑↓ 选择 · 1–5 快捷键 · esc 拒绝</div>
           </div>
         </div>
         <div class="tui-prompt">
           <div class="tui-box">
             <span class="tui-gt">&gt;</span>
-            <span class="tui-ph" id="stage-input">Message · @ file · paste · / commands</span>
+            <span class="tui-ph" id="stage-input" data-i18n="stage.placeholder">输入消息 · @ 文件 · 粘贴 · / 命令</span>
           </div>
-          <div class="tui-mode"><span class="tui-dim">·</span> default</div>
+          <div class="tui-mode"><span class="tui-dim">·</span> <span data-i18n="stage.mode">默认模式</span></div>
         </div>
       </div>
     </section>
@@ -97,35 +101,35 @@
 
     <ul class="proof-list" aria-label="安装与兼容信息">
       <li><strong>SHA256</strong><span data-i18n="proof.checksum">安装器自动校验下载文件</span></li>
-      <li><strong data-i18n="proof.platformsT">跨平台</strong><span data-i18n="proof.platforms">Linux 与 Windows，支持 x64 / ARM64</span></li>
-      <li><strong data-i18n="proof.modelsT">模型自由</strong><span data-i18n="proof.models">云端 API、兼容网关或本地 Ollama</span></li>
+      <li><strong data-i18n="proof.platformsT">Linux + Windows</strong><span data-i18n="proof.platforms">Linux 与 Windows，支持 x64 / ARM64</span></li>
+      <li><strong data-i18n="proof.modelsT">模型任选</strong><span data-i18n="proof.models">云端 API、兼容网关或本地 Ollama</span></li>
     </ul>
 
-    <h2 class="sec" data-i18n="sec.why">为什么用它</h2>
+    <h2 class="sec" data-i18n="sec.why">从需求到通过测试</h2>
     <div class="grid">
       <article class="card">
-        <h3 data-i18n="cards.capT">动手干活</h3>
-        <p data-i18n="cards.cap">它在你的项目里读代码、改文件、跑测试。不只是聊天，是真正干活的搭档。</p>
+        <h3 data-i18n="cards.capT">不只回答，直接完成</h3>
+        <p data-i18n="cards.cap">理解现有代码，完成修改，再运行测试验证结果。整个过程都在你的项目里发生。</p>
       </article>
       <article class="card">
-        <h3 data-i18n="cards.safeT">安全可控</h3>
-        <p data-i18n="cards.safe">文件工具默认限制在工作区；写入和命令默认先询问。权限可以按项目收紧或放宽。</p>
+        <h3 data-i18n="cards.safeT">边界由你决定</h3>
+        <p data-i18n="cards.safe">文件操作默认限制在工作区，写入和命令默认先询问；权限可按项目精细调整。</p>
       </article>
       <article class="card">
-        <h3 data-i18n="cards.seeT">过程透明</h3>
-        <p data-i18n="cards.see">读、改、跑，每一步都实时显示在眼前。想介入或叫停，随时都可以。</p>
+        <h3 data-i18n="cards.seeT">每一步都看得见</h3>
+        <p data-i18n="cards.see">读取、修改和执行都会实时呈现。你可以随时介入、拒绝或叫停。</p>
       </article>
       <article class="card">
-        <h3 data-i18n="cards.modelT">选择你的模型</h3>
+        <h3 data-i18n="cards.modelT">模型由你选择</h3>
         <p data-i18n="cards.model">支持 OpenAI、Anthropic、DeepSeek、Qwen、OpenAI 兼容网关和本地 Ollama。</p>
       </article>
       <article class="card">
-        <h3 data-i18n="cards.extendT">连接更多工具</h3>
-        <p data-i18n="cards.extend">通过 MCP 和技能接入浏览器、文档、图像、CAD，以及你自己的工具链。</p>
+        <h3 data-i18n="cards.extendT">接入现有工具链</h3>
+        <p data-i18n="cards.extend">通过 MCP 和技能连接浏览器、文档、图像、CAD，以及你自己的工具。</p>
       </article>
       <article class="card">
-        <h3 data-i18n="cards.automateT">交互与自动化</h3>
-        <p data-i18n="cards.automate">既能在 TUI 里协作，也支持 headless、结构化输出和本地 REST / SSE。</p>
+        <h3 data-i18n="cards.automateT">人机协作，也能自动跑</h3>
+        <p data-i18n="cards.automate">在 TUI 中共同完成任务，或使用无头模式、结构化输出和本地 REST / SSE 接入自动化。</p>
       </article>
     </div>
 
@@ -161,9 +165,9 @@
       </span>
     </footer>
   </div>
-  <script src="./assets/i18n.js?v=v0.2.1-1788504116"></script>
-  <script src="./assets/stage.js?v=v0.2.1-1788504116"></script>
-  <script src="./assets/whats-new.js?v=v0.2.1-1788504116"></script>
-  <script src="./assets/app.js?v=v0.2.1-1788504116"></script>
+  <script src="./assets/i18n.js?v=v0.2.1-1788514286"></script>
+  <script src="./assets/stage.js?v=v0.2.1-1788514286"></script>
+  <script src="./assets/whats-new.js?v=v0.2.1-1788514286"></script>
+  <script src="./assets/app.js?v=v0.2.1-1788514286"></script>
 </body>
 </html>

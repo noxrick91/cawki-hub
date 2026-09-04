@@ -1,6 +1,15 @@
 const SPINNER = ["·", "∘", "○", "◎", "●"];
-const PERM = ["1  once", "2  session", "3  always", "4  never", "5  deny once"];
 const FALLBACK_PLACEHOLDER = "Message · @ file · paste · / commands";
+
+function stageText(key, fallback) {
+  const d = typeof dict === "function" ? dict().stage : null;
+  return d?.[key] ?? fallback;
+}
+
+function permissionLabels() {
+  const labels = stageText("permissions", null);
+  return Array.isArray(labels) ? labels : ["1  once", "2  session", "3  always", "4  never", "5  deny once"];
+}
 
 function placeholderText() {
   const d = typeof dict === "function" ? dict().stage : null;
@@ -91,7 +100,7 @@ function showSheet(title, detail, selected) {
   document.getElementById("stage-sheet-detail").textContent = " " + detail;
   const box = document.getElementById("stage-sheet-choices");
   box.replaceChildren();
-  PERM.forEach((label, i) => {
+  permissionLabels().forEach((label, i) => {
     const on = i === selected;
     box.append(el("div", on ? "tui-choice on" : "tui-choice", `${on ? "❯ " : "  "}${label}`));
   });
@@ -128,9 +137,9 @@ async function spinTool(row, signal, ms) {
 
 function finalFrame(log) {
   log.replaceChildren();
-  append(log, userRow("add an expiry check to verify_token"));
-  append(log, assistantRow("I'll add a guard in src/auth.rs and keep the existing parse path."));
-  append(log, toolRow("*", "write src/auth.rs", false));
+  append(log, userRow(stageText("request", "add an expiry check to verify_token")));
+  append(log, assistantRow(stageText("response", "I'll add a guard in src/auth.rs and keep the existing parse path.")));
+  append(log, toolRow("*", stageText("write", "write src/auth.rs"), false));
   append(
     log,
     diffBlock([
@@ -142,7 +151,7 @@ function finalFrame(log) {
       "      Ok(token.claims())",
     ])
   );
-  showSheet("write src/auth.rs", "src/auth.rs", 0);
+  showSheet(stageText("write", "write src/auth.rs"), "src/auth.rs", 0);
   setInput("", true);
 }
 
@@ -158,7 +167,7 @@ async function playLoop(signal) {
     hideSheet();
     setInput("", true);
 
-    const draft = "add an expiry check to verify_token";
+    const draft = stageText("request", "add an expiry check to verify_token");
     const input = document.getElementById("stage-input");
     input.classList.remove("tui-ph");
     input.textContent = "";
@@ -180,13 +189,13 @@ async function playLoop(signal) {
     const asst = append(log, assistantRow(""));
     await typeText(
       asst,
-      "I'll add a guard in src/auth.rs and keep the existing parse path.",
+      stageText("response", "I'll add a guard in src/auth.rs and keep the existing parse path."),
       signal,
       42
     );
     await sleep(360, signal);
 
-    const tool = append(log, toolRow(SPINNER[0], "write src/auth.rs", true));
+    const tool = append(log, toolRow(SPINNER[0], stageText("write", "write src/auth.rs"), true));
     await spinTool(tool, signal, 700);
     append(
       log,
@@ -201,19 +210,19 @@ async function playLoop(signal) {
     );
     await sleep(400, signal);
 
-    showSheet("write src/auth.rs", "src/auth.rs", 0);
-    setInput("type to queue · 1–5 / enter grant · esc deny", true);
+    showSheet(stageText("write", "write src/auth.rs"), "src/auth.rs", 0);
+    setInput(stageText("queued", "type to queue · 1–5 / enter grant · esc deny"), true);
     await sleep(900, signal);
-    showSheet("write src/auth.rs", "src/auth.rs", 0);
+    showSheet(stageText("write", "write src/auth.rs"), "src/auth.rs", 0);
     await sleep(350, signal);
     hideSheet();
-    append(log, systemRow("allowed Once write src/auth.rs"));
+    append(log, systemRow(stageText("allowed", "allowed once: write src/auth.rs")));
     setInput("", true);
     await sleep(400, signal);
 
-    const run = append(log, toolRow(SPINNER[0], "run cargo test -p ledger -- auth", true));
+    const run = append(log, toolRow(SPINNER[0], stageText("run", "run cargo test -p ledger -- auth"), true));
     await spinTool(run, signal, 900);
-    append(log, el("div", "tui-out", "ok. 3 passed; 0 failed"));
+    append(log, el("div", "tui-out", stageText("passed", "ok: 3 passed; 0 failed")));
     await sleep(1800, signal);
   }
 }
@@ -231,4 +240,7 @@ function startStage() {
 document.addEventListener("DOMContentLoaded", () => {
   if (!document.getElementById("stage")) return;
   startStage();
+});
+document.addEventListener("caw-lang", () => {
+  if (document.getElementById("stage")) startStage();
 });

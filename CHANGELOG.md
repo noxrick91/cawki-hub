@@ -6,6 +6,13 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 
 ## [Unreleased]
 
+## [0.2.1] - 2026-09-04
+
+### Added
+
+- Added type-to-filter search to the provider and model pickers, including Router tier assignment.
+- Added a cached live OpenRouter catalog with tool/vision capability filtering and an offline shortlist fallback.
+
 ## [0.2.0] - 2026-09-03
 
 ### Breaking
